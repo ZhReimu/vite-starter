@@ -1,23 +1,12 @@
-<script setup lang="ts">
-import { useDark, useToggle } from '@vueuse/core'
-
-const isDark = useDark()
-const toggleDark = useToggle(isDark)
-
-defineProps<{ msg: string }>()
-
-const count = ref(0)
-</script>
-
 <template>
   <h1>{{ msg }}</h1>
 
   <div class="card">
-    <el-button type="primary" @click="count++">
+    <el-button type="primary" @click="addCount">
       <el-icon>
         <Plus />
       </el-icon>
-      <span>count is {{ count }}</span>
+      <span>count is {{ store.state.count }}</span>
     </el-button>
     <el-button type="primary" @click="toggleDark()">切换主题</el-button>
     <p>
@@ -39,6 +28,23 @@ const count = ref(0)
   <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
 </template>
 
+<script setup lang="ts">
+import { useDark, useToggle } from '@vueuse/core'
+import { useStore } from 'vuex';
+
+const isDark = useDark()
+const store = useStore<{
+  count: number
+}>()
+const toggleDark = useToggle(isDark)
+defineProps<{ msg: string }>()
+
+const addCount = () => {
+  store.commit('increment')
+}
+
+</script>
+  
 <style scoped>
 .read-the-docs {
   color: #888;
